@@ -1,0 +1,243 @@
+{
+  "info": {
+    "_postman_id": "a5df7041-2355-42f7-8166-e251b07b7136",
+    "name": "API ODAPAS Reporte",
+    "description": "Pruebas GET de los 2 controladores: ControladorZonas (/api/zonas) y ControladorReportes (/api/reportes).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "urlBase",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Controlador de zonas",
+      "item": [
+        {
+          "name": "Listar zonas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/zonas",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "zonas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Devuelve 3 zonas\", () => pm.expect(pm.response.json().length).to.eql(3));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener zona por código",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/zonas/ZN",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "zonas",
+                "ZN"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Es la Zona Norte\", () => pm.expect(pm.response.json().nombre).to.eql(\"Zona Norte\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Zona inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/zonas/XX",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "zonas",
+                "XX"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Controlador de reportes",
+      "item": [
+        {
+          "name": "Listar reportes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/reportes",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "reportes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Devuelve 3 reportes\", () => pm.expect(pm.response.json().length).to.eql(3));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filtrar reportes por tipo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/reportes?tipo=fuga",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "fuga"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Solo reportes de fuga\", () => pm.response.json().forEach(r => pm.expect(r.tipo).to.eql(\"fuga\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filtrar reportes por zona",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/reportes?zona=ZC",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "zona",
+                  "value": "ZC"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Solo reportes de Zona Centro\", () => pm.response.json().forEach(r => pm.expect(r.zona).to.eql(\"ZC\")));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener reporte por folio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlBase}}/api/reportes/R-000123",
+              "host": [
+                "{{urlBase}}"
+              ],
+              "path": [
+                "api",
+                "reportes",
+                "R-000123"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta con estado 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Es el folio R-000123\", () => pm.expect(pm.response.json().folio).to.eql(\"R-000123\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
